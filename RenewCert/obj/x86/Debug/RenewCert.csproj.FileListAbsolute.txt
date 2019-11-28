@@ -1,0 +1,5 @@
+C:\Users\srossmann\Source\Repos\ExtendClickOnceCertificate\RenewCert\bin\Debug\RenewCert.exe
+C:\Users\srossmann\Source\Repos\ExtendClickOnceCertificate\RenewCert\bin\Debug\RenewCert.pdb
+C:\Users\srossmann\Source\Repos\ExtendClickOnceCertificate\RenewCert\obj\x86\Debug\RenewCert.csprojAssemblyReference.cache
+C:\Users\srossmann\Source\Repos\ExtendClickOnceCertificate\RenewCert\obj\x86\Debug\RenewCert.exe
+C:\Users\srossmann\Source\Repos\ExtendClickOnceCertificate\RenewCert\obj\x86\Debug\RenewCert.pdb

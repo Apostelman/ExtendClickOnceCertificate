@@ -7,12 +7,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 
+
 namespace NewRenewCert
 {
     class Program
     {
 
         const int YearsToExtend = 105;
+        public const string OID_RSA_SHA256RSA = "1.2.840.113549.1.1.11";
 
         // ReSharper disable InconsistentNaming
 
@@ -126,7 +128,7 @@ namespace NewRenewCert
                 if (!Crypt.CertStrToName(Crypt.X509Encoding.ASN_Encodings, szCertName, Crypt.CertNameType.CERT_OID_NAME_STR, IntPtr.Zero, null, ref certNameBlob.cbData, IntPtr.Zero))
                     throw new Win32Exception("CertStrToName");
                 certNameBlob.pbData = Crypt.CryptMemAlloc(sizeof(byte) * certNameBlob.cbData);
-                if (!Crypt.CertStrToName(Crypt.X509Encoding.ASN_Encodings, szCertName, Crypt.CertNameType.CERT_OID_NAME_STR, IntPtr.Zero, certNameBlob.pbData, ref  certNameBlob.cbData, IntPtr.Zero))
+                if (!Crypt.CertStrToName(Crypt.X509Encoding.ASN_Encodings, szCertName, Crypt.CertNameType.CERT_OID_NAME_STR, IntPtr.Zero, certNameBlob.pbData, ref certNameBlob.cbData, IntPtr.Zero))
                     throw new Win32Exception("CertStrToName2");
                 //var buffer = new char[1024];
                 char[] buffer = new char[1024];
@@ -143,7 +145,14 @@ namespace NewRenewCert
                 // For some reason, evaluating this next line makes the create cert work
                 var junk = string.Format("  {0}, {1}/{2}, {3}, {4}", hCPContext, certNameBlob.cbData, certNameBlob.pbData, Info, certExpireDate.ToDate());
 
-                hCertContext = Crypt.CertCreateSelfSignCertificate(hCPContext, ref certNameBlob, 0, Info, IntPtr.Zero, null, certExpireDate, IntPtr.Zero);
+                var signatureAlgorithm = new Win32Native.CRYPT_ALGORITHM_IDENTIFIER
+                {
+                    pszObjId = OID_RSA_SHA256RSA
+                };
+                signatureAlgorithm.parameters.cbData = 0;
+                signatureAlgorithm.parameters.pbData = IntPtr.Zero;
+
+                hCertContext = Win32Native.CertCreateSelfSignCertificate(hCPContext, ref certNameBlob, 0, Info, ref signatureAlgorithm, null, certExpireDate, IntPtr.Zero);
                 if (hCertContext == IntPtr.Zero)
                     throw new Win32Exception("CertCreateSelfSignCertificate");
                 hTempStore = Crypt.CertOpenStore(new IntPtr(Crypt.CERT_STORE_PROV_MEMORY), 0, IntPtr.Zero, Crypt.CERT_STORE_CREATE_NEW_FLAG, null);

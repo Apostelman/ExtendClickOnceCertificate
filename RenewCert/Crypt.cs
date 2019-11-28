@@ -183,6 +183,7 @@ namespace NewRenewCert
             IntPtr other);
 
 
+
         [DllImport(@"crypt32.dll")]
         public static extern int CertFreeCertificateContext(IntPtr pCertContext);
 
