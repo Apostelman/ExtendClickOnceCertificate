@@ -1,6 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\RenewCert"
   ],
+  "SelectedNode": "\\RenewCert\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
